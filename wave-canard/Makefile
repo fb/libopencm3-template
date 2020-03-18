@@ -4,6 +4,7 @@ BUILD_DIR = bin
 SHARED_DIR = ../libcanard
 CFILES = main.c
 CFILES += canard.c
+CFILES += drivers/stm32/canard_stm32.c
 
 # TODO - you will need to edit these two lines!
 DEVICE=stm32f103c8
