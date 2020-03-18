@@ -8,7 +8,7 @@ CFILES += drivers/stm32/canard_stm32.c
 
 # TODO - you will need to edit these two lines!
 DEVICE=stm32f103c8
-OOCD_FILE = board/stm32f4discovery.cfg
+OOCD_FILE = openocd.cfg
 
 # You shouldn't have to edit anything below here.
 VPATH += $(SHARED_DIR)
