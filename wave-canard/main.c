@@ -1,5 +1,6 @@
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
+#include <libopencm3/stm32/desig.h> // desig_get_unique_id
 #include <libopencm3/cm3/nvic.h>
 #include <libopencm3/cm3/systick.h>
 
@@ -49,6 +50,7 @@ void sys_tick_handler(void)
 static CanardInstance g_canard;             // The library instance
 static uint8_t g_canard_memory_pool[1024];  // Arena for memory allocation, used by the library
 
+#define UNIQUE_ID_LENGTH_BYTES 16
 #define APP_VERSION_MAJOR                       99
 
 #define APP_VERSION_MINOR                       99
@@ -101,6 +103,14 @@ static void makeNodeStatusMessage(uint8_t buffer[UAVCAN_NODE_STATUS_MESSAGE_SIZE
     canardEncodeScalar(buffer, 34,  3, &node_mode);
 }
 
+static void readUniqueID(uint8_t buffer[UNIQUE_ID_LENGTH_BYTES])
+{
+    memset(buffer, 0, UNIQUE_ID_LENGTH_BYTES);
+    uint32_t uid_buf[3];
+    desig_get_unique_id(uid_buf);
+    memcpy(&buffer[2], uid_buf, 12);
+}
+
 static uint16_t makeNodeInfoMessage(uint8_t buffer[UAVCAN_GET_NODE_INFO_RESPONSE_MAX_SIZE])
 {
     memset(buffer, 0, UAVCAN_GET_NODE_INFO_RESPONSE_MAX_SIZE);
@@ -112,7 +122,10 @@ static uint16_t makeNodeInfoMessage(uint8_t buffer[UAVCAN_GET_NODE_INFO_RESPONSE
     const uint32_t git_hash = GIT_HASH;
     canardEncodeScalar(buffer, 80, 32, &git_hash);
 
-    readUniqueID(&buffer[24]);
+    uint8_t my_unique_id[UNIQUE_ID_LENGTH_BYTES];
+    readUniqueID(my_unique_id);
+    memcpy(&buffer[24], my_unique_id, UNIQUE_ID_LENGTH_BYTES);
+
     const size_t name_len = strlen(APP_NODE_NAME);
     memcpy(&buffer[41], APP_NODE_NAME, name_len);
     return 41 + name_len ;
