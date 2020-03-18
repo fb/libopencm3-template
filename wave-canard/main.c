@@ -10,10 +10,17 @@ static volatile uint32_t systick_millis;
 
 void usleep(void);
 
+static uint32_t millis(void)
+{
+    return systick_millis;
+}
+
 // called with usleep(1000) from canard.c
 extern void usleep(void)
 {
-    // TODO implement 1 ms delay
+    // TODO exact 1 ms delay using micros()
+    uint32_t ms = millis();
+    while(millis() - ms < 2U);
 }
 
 static void clock_setup(void)
