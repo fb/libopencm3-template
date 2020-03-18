@@ -1,10 +1,9 @@
 PROJECT = wave-canard
 BUILD_DIR = bin
 
-SHARED_DIR = ../my-common-code
+SHARED_DIR = ../libcanard
 CFILES = main.c
-CFILES += api.c
-AFILES += api-asm.S
+CFILES += canard.c
 
 # TODO - you will need to edit these two lines!
 DEVICE=stm32f103c8
