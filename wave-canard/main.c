@@ -31,8 +31,19 @@ static void clock_setup(void)
 {
     rcc_clock_setup_in_hse_8mhz_out_72mhz();
 
-    /* Enable GPIOC clock. */
+    rcc_periph_clock_enable(RCC_AFIO);
     rcc_periph_clock_enable(RCC_GPIOA);
+	rcc_periph_clock_enable(RCC_CAN1);
+
+    // CAN1_RX is PA11, CAN1_TX is PA12
+    /* Configure CAN pin: RX (input pull-up). */
+    gpio_set_mode(GPIO_BANK_CAN1_RX, GPIO_MODE_INPUT,
+            GPIO_CNF_INPUT_PULL_UPDOWN, GPIO_CAN1_RX);
+    gpio_set(GPIO_BANK_CAN1_RX, GPIO_CAN1_RX);
+
+    /* Configure CAN pin: TX. */
+    gpio_set_mode(GPIO_BANK_CAN1_TX, GPIO_MODE_OUTPUT_50_MHZ,
+            GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO_CAN1_TX);
 }
 
 static void gpio_setup(void)
