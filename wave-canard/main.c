@@ -66,9 +66,6 @@ static uint8_t g_canard_memory_pool[1024];  // Arena for memory allocation, used
 
 #define APP_VERSION_MINOR                       99
 #define APP_NODE_NAME                           "wave.canard"
-#ifndef GIT_HASH
-#define GIT_HASH                                0xBADC0FFE
-#endif // GIT_HASH
 
 #define UAVCAN_NODE_STATUS_DATA_TYPE_ID                             341
 #define UAVCAN_NODE_STATUS_DATA_TYPE_SIGNATURE                      0x0f0868d0c1a7c6f1
@@ -129,9 +126,12 @@ static uint16_t makeNodeInfoMessage(uint8_t buffer[UAVCAN_GET_NODE_INFO_RESPONSE
 
     buffer[7] = APP_VERSION_MAJOR;
     buffer[8] = APP_VERSION_MINOR;
+
+#ifdef GIT_HASH
     buffer[9] = 1;  // Optional field flags, VCS commit is set
     const uint32_t git_hash = GIT_HASH;
     canardEncodeScalar(buffer, 80, 32, &git_hash);
+#endif // GIT_HASH
 
     uint8_t my_unique_id[UNIQUE_ID_LENGTH_BYTES];
     readUniqueID(my_unique_id);
