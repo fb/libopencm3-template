@@ -9,6 +9,7 @@ UAVCAN provided services:
 * `uavcan.protocol.GetNodeInfo`
 
 It does nothing.
+Node ID 100 is hard-coded.
 Use it as a base to build cool stuff.
 
 # Hardware Setup

@@ -66,6 +66,7 @@ static uint8_t g_canard_memory_pool[1024];  // Arena for memory allocation, used
 
 #define APP_VERSION_MINOR                       99
 #define APP_NODE_NAME                           "wave.canard"
+#define APP_NODE_ID                             100
 
 #define UAVCAN_NODE_STATUS_DATA_TYPE_ID                             341
 #define UAVCAN_NODE_STATUS_DATA_TYPE_SIGNATURE                      0x0f0868d0c1a7c6f1
@@ -191,7 +192,7 @@ static void uavcan_init(void)
                shouldAcceptTransfer,              // Callback, see CanardShouldAcceptTransfer
                NULL);
 
-    canardSetLocalNodeID(&g_canard, 100);
+    canardSetLocalNodeID(&g_canard, APP_NODE_ID);
 }
 
 static void sendCanard(void)
